@@ -1,0 +1,18 @@
+### 一覧取得
+GET http://localhost:8080/records
+
+### 詳細取得
+GET http://localhost:8080/records/1
+
+### 登録
+POST http://localhost:8080/records
+Content-Type: application/json
+
+{
+  "studyDate": "2026-06-05",
+  "studyContent": "DELETE APIテスト",
+  "studyHours": 1
+}
+
+### 削除
+DELETE http://localhost:8080/records/1
