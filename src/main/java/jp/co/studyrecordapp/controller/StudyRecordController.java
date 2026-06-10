@@ -8,10 +8,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PutMapping;
 
 import jp.co.studyrecordapp.entity.StudyRecord;
 import jp.co.studyrecordapp.service.StudyRecordService;
 
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 public class StudyRecordController {
 
@@ -45,5 +48,13 @@ public class StudyRecordController {
             @PathVariable Long id) {
 
         studyRecordService.deleteById(id);
+    }
+
+    @PutMapping("/records/{id}")
+    public StudyRecord updateRecord(
+            @PathVariable Long id,
+            @RequestBody StudyRecord studyRecord) {
+
+        return studyRecordService.update(id, studyRecord);
     }
 }

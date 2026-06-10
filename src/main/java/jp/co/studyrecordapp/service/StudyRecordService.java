@@ -33,5 +33,12 @@ public class StudyRecordService {
         studyRecordRepository.deleteById(recordId);
     }
 
+    public StudyRecord update(Long recordId, StudyRecord studyRecord) {
+
+        studyRecord.setRecordId(recordId);
+
+        return studyRecordRepository.save(studyRecord);
+    }
+
 
 }

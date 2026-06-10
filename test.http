@@ -9,9 +9,19 @@ POST http://localhost:8080/records
 Content-Type: application/json
 
 {
-  "studyDate": "2026-06-05",
-  "studyContent": "DELETE APIテスト",
-  "studyHours": 1
+  "studyDate": "2026-06-09",
+  "studyContent": "更新前データ",
+  "studyHours": 3
+}
+
+### 更新
+PUT http://localhost:8080/records/1
+Content-Type: application/json
+
+{
+  "studyDate": "2026-06-10",
+  "studyContent": "更新テスト",
+  "studyHours": 10
 }
 
 ### 削除
