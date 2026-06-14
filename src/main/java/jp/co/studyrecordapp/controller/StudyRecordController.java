@@ -10,11 +10,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 import jp.co.studyrecordapp.entity.StudyRecord;
 import jp.co.studyrecordapp.service.StudyRecordService;
 
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "*")
 @RestController
 public class StudyRecordController {
 
@@ -24,37 +26,73 @@ public class StudyRecordController {
         this.studyRecordService = studyRecordService;
     }
 
+    private boolean isAuthorized(String token) {
+        return "study-app-token".equals(token);
+    }
+
     @GetMapping("/records")
-    public List<StudyRecord> getRecords() {
-        return studyRecordService.findAll();
+    public ResponseEntity<?> getRecords(
+            @RequestHeader(value = "token", required = false) String token) {
+
+        System.out.println("token=" + token);
+
+        if (!isAuthorized(token)) {
+            return ResponseEntity.status(401).body("Unauthorized");
+        }
+
+        return ResponseEntity.ok(studyRecordService.findAll());
     }
 
     @PostMapping("/records")
-    public StudyRecord createRecord(
+    public ResponseEntity<?> createRecord(
+            @RequestHeader(value = "token", required = false) String token,
             @RequestBody StudyRecord studyRecord) {
 
-        return studyRecordService.save(studyRecord);
+        if (!isAuthorized(token)) {
+            return ResponseEntity.status(401).body("Unauthorized");
+        }
+
+        return ResponseEntity.ok(
+                studyRecordService.save(studyRecord));
     }
 
     @GetMapping("/records/{id}")
-    public StudyRecord getRecord(
+    public ResponseEntity<?> getRecord(
+            @RequestHeader(value = "token", required = false) String token,
             @PathVariable Long id) {
 
-        return studyRecordService.findById(id);
+        if (!isAuthorized(token)) {
+            return ResponseEntity.status(401).body("Unauthorized");
+        }
+
+        return ResponseEntity.ok(studyRecordService.findById(id));
     }
 
     @DeleteMapping("/records/{id}")
-    public void deleteRecord(
+    public ResponseEntity<?> deleteRecord(
+            @RequestHeader(value = "token", required = false) String token,
             @PathVariable Long id) {
 
+        if (!isAuthorized(token)) {
+            return ResponseEntity.status(401).body("Unauthorized");
+        }
+
         studyRecordService.deleteById(id);
+
+        return ResponseEntity.ok("Deleted");
     }
 
     @PutMapping("/records/{id}")
-    public StudyRecord updateRecord(
+    public ResponseEntity<?> updateRecord(
+            @RequestHeader(value = "token", required = false) String token,
             @PathVariable Long id,
             @RequestBody StudyRecord studyRecord) {
 
-        return studyRecordService.update(id, studyRecord);
+        if (!isAuthorized(token)) {
+            return ResponseEntity.status(401).body("Unauthorized");
+        }
+
+        return ResponseEntity.ok(
+                studyRecordService.update(id, studyRecord));
     }
 }
